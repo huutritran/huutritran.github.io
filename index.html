@@ -1,1 +1,15 @@
-"Hello World from master" 
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>PostMessage Demo</title>
+  </head>
+  <body>
+    <h1>Click anywhere to send message to Android</h1>
+    <script>
+      document.addEventListener('click', function(){
+        console.log('Web: Sending message to native');
+        window.postMessage('interaction:click', '*');
+      });
+    </script>
+  </body>
+</html>
