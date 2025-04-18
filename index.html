@@ -9,6 +9,9 @@
       document.addEventListener('click', function(){
         console.log('Web: Sending message to native');
         window.postMessage('interaction:click', '*');
+        if (window.chrome && window.chrome.postMessage) {
+          chrome.postMessage('interaction:click');
+        }
       });
     </script>
   </body>
