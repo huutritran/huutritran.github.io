@@ -6,13 +6,41 @@
   <body>
     <h1>Click anywhere to send message to Android</h1>
     <script>
-      document.addEventListener('click', function(){
-        console.log('Web: Sending message to native');
-        window.postMessage('interaction:click', '*');
-        if (window.chrome && window.chrome.postMessage) {
-          chrome.postMessage('interaction:click');
-        }
+      (function (){
+      let messagePort = null;
+      
+      window.addEventListener("message", function (event) {
+        // We are receiveing messages from any origin, you can check of the origin by
+        // using event.origin
+        // get the port then use it for communication.
+        messagePort = event.ports[0];
+        if (typeof port === 'undefined') return;
+      
+        // Receive upcoming messages on this port.
+        messagePort.onmessage = function(event) {
+          console.log("[PostMessage] Got message" + event.data);
+        };
+        
+        // Post message on this port.
+        messagePort.postMessage("web:ready")
       });
+      
+      document.addEventListener('click', function(){
+      
+       if(messagePort) {
+      		try {
+            	messagePort.postMessage('interaction:click')
+            } catch (error) {
+                console.error("[PostMessage] Error while sending message", error);
+            }
+       
+       } else {
+        console.warn("[PostMessage] Message port not intitialized");
+       }
+      });
+      	
+      })();
+      
     </script>
   </body>
 </html>
